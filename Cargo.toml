@@ -1,0 +1,28 @@
+[package]
+name = "tunnel-updater"
+version = "0.1.0"
+authors = ["Vladimir Bulyga <zero@13w.me>"]
+description = ""
+license = "MIT"
+readme = "README.md"
+
+[profile.release]
+debug = false
+
+[dependencies]
+rocket = "0.3.6"
+rocket_codegen = "0.3.6"
+
+[package.metadata.deb]
+maintainer = "Vladimir Bulyga"
+copyright = "2018, Vladimir Bulyga<zero@13w.me>"
+license-file = ["LICENSE", "4"]
+extended-description = """\
+descr."""
+depends = "$auto, systemd"
+section = "admin"
+priority = "optional"
+assets = [
+    ["target/release/tunnel", "usr/bin/", "755"],
+    ["README.md", "usr/share/doc/cargo-deb/README", "644"],
+]
