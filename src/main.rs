@@ -48,7 +48,7 @@ fn change(opts: Opts, ip: IpAddress) -> String {
     };
 
     if app_key == opts.key {
-        Command::new("/sbin/ip")
+        let result = Command::new("/sbin/ip")
             .arg("tunnel")
             .arg("change")
             .arg(opts.tunnel)
@@ -57,7 +57,7 @@ fn change(opts: Opts, ip: IpAddress) -> String {
             .output()
             .expect("Filed to execute command.");
 
-        "true".to_string()
+        result.stderr.into_iter().map(|d| d as char).collect::<String>()
     } else {
         "false".to_string()
     }
