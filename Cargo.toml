@@ -1,6 +1,6 @@
 [package]
 name = "tunnel-updater"
-version = "0.1.0"
+version = "0.1.2"
 authors = ["Vladimir Bulyga <zero@13w.me>"]
 description = ""
 license = "MIT"
@@ -10,8 +10,8 @@ readme = "README.md"
 debug = false
 
 [dependencies]
-rocket = "0.3.6"
-rocket_codegen = "0.3.6"
+rocket = "*"
+rocket_codegen = "*"
 
 [package.metadata.deb]
 maintainer = "Vladimir Bulyga"
@@ -23,6 +23,8 @@ depends = "$auto, systemd"
 section = "admin"
 priority = "optional"
 assets = [
-    ["target/release/tunnel", "usr/bin/", "755"],
+    ["target/release/tunnel-updater", "usr/bin/tunnel-updater", "755"],
+    ["tunnel-updater.default", "etc/default/tunnel-updater", "644"],
+    ["tunnel-updater.service", "lib/systemd/system/", "644"],
     ["README.md", "usr/share/doc/cargo-deb/README", "644"],
 ]

@@ -1,0 +1,21 @@
+[Unit]
+Description=Tunnel Updater service
+After=network.target auditd.service
+
+[Service]
+EnvironmentFile=-/etc/default/tunnel-updater
+#ExecStartPre=/usr/bin/tunnel-updater
+ExecStart=/usr/bin/tunnel-updater
+ExecReload=/usr/bin/tunnel-updater
+ExecReload=/bin/kill -HUP $MAINPID
+#KillMode=process
+Restart=on-failure
+#RestartPreventExitStatus=255
+#Type=forking
+StandardOutput=null
+StandardError=syslog
+SyslogIdentifier=tunnel-updater
+
+[Install]
+WantedBy=multi-user.target
+Alias=tunnel-updater.service

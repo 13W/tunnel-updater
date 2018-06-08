@@ -40,7 +40,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for IpAddress {
 
 
 #[get("/update?<opts>")]
-fn change(opts: Opts, ip: IpAddress) -> String {
+fn update(opts: Opts, ip: IpAddress) -> String {
     let app_key = if let Some(app_key) = env::var("APP_KEY").ok() {
         app_key
     } else {
@@ -64,5 +64,5 @@ fn change(opts: Opts, ip: IpAddress) -> String {
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![change]).launch();
+    rocket::ignite().mount("/", routes![update]).launch();
 }
