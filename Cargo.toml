@@ -1,6 +1,6 @@
 [package]
 name = "tunnel-updater"
-version = "0.1.2"
+version = "0.3.0"
 authors = ["Vladimir Bulyga <zero@13w.me>"]
 description = ""
 license = "MIT"
@@ -8,10 +8,18 @@ readme = "README.md"
 
 [profile.release]
 debug = false
+opt-level = "s"
+lto = true
+panic = "abort"
+rustflags = [
+    "link-arg=-s"
+]
 
 [dependencies]
-rocket = "*"
-rocket_codegen = "*"
+actix = "0.7.8"
+actix-web = "0.7.15"
+env_logger = "0.6.0"
+clap = "2.32.0"
 
 [package.metadata.deb]
 maintainer = "Vladimir Bulyga"
