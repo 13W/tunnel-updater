@@ -5,6 +5,7 @@ authors = ["Vladimir Bulyga <zero@13w.me>"]
 description = ""
 license = "MIT"
 readme = "README.md"
+edition = "2018"
 
 [profile.release]
 debug = false
