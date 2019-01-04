@@ -17,8 +17,8 @@ rustflags = [
 ]
 
 [dependencies]
-actix = "0.7.8"
-actix-web = "0.7.15"
+actix = "0.7.9"
+actix-web = "0.7.17"
 env_logger = "0.6.0"
 clap = "2.32.0"
 
