@@ -5,6 +5,7 @@ extern crate clap;
 
 use actix_web::{server, http, middleware, App, HttpRequest, HttpResponse, http::Method, Responder};
 
+use std::env::{var, set_var};
 use std::sync::Arc;
 use std::process::Command;
 use clap::*;
@@ -52,7 +53,10 @@ fn index(req: HttpRequest<AppState>) -> impl Responder {
     HttpResponse::from(result)
 }
 fn main() {
-    ::std::env::set_var("RUST_LOG", "actix_web=debug");
+    if var("RUST_LOG").is_err() {
+        set_var("RUST_LOG", "actix_web=debug");
+    }
+
     env_logger::init();
 
     let matches = clap::App::new("IP tunnel updater")

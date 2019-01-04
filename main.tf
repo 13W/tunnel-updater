@@ -31,6 +31,7 @@ resource "docker_container" "build" {
       source /root/.cargo/env
       cargo install cargo-deb
       cargo deb
+      
       mkdir -p target/debian-${var.images[count.index]}
       cp target/debian/* target/debian-${var.images[count.index]}
 END
