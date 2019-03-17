@@ -1,14 +1,10 @@
-extern crate env_logger;
-extern crate actix;
-extern crate actix_web;
-extern crate clap;
-
 use actix_web::{server, http, middleware, App, HttpRequest, HttpResponse, http::Method, Responder};
 
 use std::env::{var, set_var};
 use std::sync::Arc;
 use std::process::Command;
-use clap::*;
+
+mod config;
 
 struct AppState {
     secret: Arc<String>,
@@ -59,45 +55,21 @@ fn main() {
 
     env_logger::init();
 
-    let matches = clap::App::new("IP tunnel updater")
-        .version(crate_version!())
-        .about("Tools for updating the remote tunnel address")
-
-        .arg(clap::Arg::with_name("address")
-            .help("host address")
-            .short("a")
-            .env("ADDRESS")
-            .default_value("0.0.0.0"))
-
-        .arg(clap::Arg::with_name("port")
-            .help("host port")
-            .short("p")
-            .env("PORT")
-            .default_value("38123"))
-
-        .arg(clap::Arg::with_name("secret")
-            .help("update key")
-            .short("s")
-            .env("SECRET")
-            .default_value("SeCrEtKeY"))
-        .get_matches();
-
-    let host = matches.value_of("address").unwrap();
-    let port = matches.value_of("port").unwrap()
-        .parse::<u32>().expect("invalid port number");
-    let secret = Arc::new(matches.value_of("secret").unwrap().to_string());
-
+    let config = config::get();
     let sys = actix::System::new("static_index");
+    let secret = Arc::new(config.secret);
 
-    server::new(move || {
-        App::with_state(AppState{secret: secret.clone()/*, log: logger.clone()*/})
+    let mut app = server::new(move || {
+        App::with_state(AppState{secret: secret.clone()})
             .middleware(middleware::Logger::default())
-            .resource("/update", |r| r.method(Method::GET).with(index))
+            .route("/update", Method::GET, index)
+    });
 
-    }).bind(&format!("{}:{}", host, port))
-        .expect(format!("Can not start on {}:{}", host, port).as_str())
-        .start();
+    app = app.bind(&format!("{}:{}", &config.host, &config.port))
+        .expect(format!("Can not start on {}:{}", &config.host, &config.port).as_str());
 
-    println!("Tunnel-updater started on {}:{}", host, port);
+    app.start();
+
+    println!("Tunnel-updater started on {}:{}", &config.host, &config.port);
     sys.run();
 }
